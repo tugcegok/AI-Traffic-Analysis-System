@@ -190,11 +190,10 @@ A separate seed script can generate **synthetic test records** for development. 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-cd YOUR_REPOSITORY
+git clone https://github.com/tugcegok/AI-Traffic-Analysis-System.git
+cd AI-Traffic-Analysis-System
 ```
 
-Replace the placeholders with the actual GitHub repository URL and directory name.
 
 ### 2. Create a virtual environment
 
