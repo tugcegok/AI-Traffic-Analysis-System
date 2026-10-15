@@ -1,0 +1,3234 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Trafik Analiz Sistemi</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background-color: #f4f6f8;
+
+            margin: 0;
+
+            padding: 0;
+
+            color: #222;
+        }
+
+
+        .container {
+
+            width: 90%;
+
+            max-width: 1050px;
+
+            margin: 50px auto;
+
+            background-color: white;
+
+            padding: 40px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 18px
+                rgba(0, 0, 0, 0.10);
+        }
+
+
+        h1 {
+
+            text-align: center;
+
+            margin-bottom: 10px;
+        }
+
+
+        h2 {
+
+            text-align: center;
+        }
+
+
+        .description {
+
+            text-align: center;
+
+            color: #666;
+
+            margin-bottom: 40px;
+        }
+
+
+        .section {
+
+            margin-top: 55px;
+        }
+
+
+        .section-description {
+
+            text-align: center;
+
+            color: #666;
+
+            margin-bottom: 25px;
+
+            line-height: 1.6;
+        }
+
+
+        /* ==================================================
+           VIDEO YÜKLEME
+        ================================================== */
+
+
+        .upload-box {
+
+            border: 2px dashed #999;
+
+            padding: 40px;
+
+            text-align: center;
+
+            border-radius: 10px;
+
+            background-color: #fafafa;
+        }
+
+
+        input[type="file"] {
+
+            margin: 20px 0;
+        }
+
+
+        button {
+
+            display: block;
+
+            margin: 20px auto 0;
+
+            padding: 14px 30px;
+
+            font-size: 16px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            background-color: #222;
+
+            color: white;
+        }
+
+
+        button:hover {
+
+            opacity: 0.85;
+        }
+
+
+        button:disabled {
+
+            opacity: 0.6;
+
+            cursor: not-allowed;
+        }
+
+
+        #status {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            font-weight: bold;
+        }
+
+
+        /* ==================================================
+           GENEL KARTLAR
+        ================================================== */
+
+
+        .features {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 15px;
+
+            margin-top: 25px;
+        }
+
+
+        .feature {
+
+            background-color: #f4f6f8;
+
+            padding: 18px;
+
+            border-radius: 8px;
+        }
+
+
+        .result-card {
+
+            background-color: #f4f6f8;
+
+            padding: 20px;
+
+            border-radius: 8px;
+
+            text-align: center;
+        }
+
+
+        .result-card strong {
+
+            display: block;
+
+            font-size: 25px;
+
+            margin-top: 8px;
+        }
+
+
+        .total-card {
+
+            grid-column: span 2;
+
+            background-color: #e8edf2;
+        }
+
+
+        /* ==================================================
+           VİDEO ANALİZ SONUÇLARI
+        ================================================== */
+
+
+        #results {
+
+            display: none;
+
+            margin-top: 40px;
+        }
+
+
+        /* ==================================================
+           ŞERİT BAZLI ARAÇ SAYIMI
+        ================================================== */
+
+
+        #laneResults {
+
+            display: none;
+
+            margin-top: 45px;
+        }
+
+
+        .lane-description {
+
+            text-align: center;
+
+            color: #666;
+
+            margin-bottom: 25px;
+        }
+
+
+        .lane-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+        }
+
+
+        .lane-card {
+
+            background-color: #f4f6f8;
+
+            padding: 20px;
+
+            border-radius: 8px;
+
+            text-align: center;
+        }
+
+
+        .lane-card strong {
+
+            display: block;
+
+            font-size: 26px;
+
+            margin-top: 8px;
+        }
+
+
+        .lane-summary {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+
+            margin-top: 15px;
+        }
+
+
+        .lane-summary-card {
+
+            padding: 20px;
+
+            border-radius: 8px;
+
+            text-align: center;
+
+            background-color: #e8edf2;
+        }
+
+
+        .lane-summary-card strong {
+
+            display: block;
+
+            font-size: 25px;
+
+            margin-top: 8px;
+        }
+
+
+        /* ==================================================
+           İŞLENMİŞ VİDEO
+        ================================================== */
+
+
+        #videoResult {
+
+            display: none;
+
+            margin-top: 40px;
+        }
+
+
+        .video-container {
+
+            margin-top: 20px;
+
+            background-color: #111;
+
+            padding: 10px;
+
+            border-radius: 10px;
+        }
+
+
+        #processedVideo {
+
+            width: 100%;
+
+            border-radius: 8px;
+
+            display: block;
+        }
+
+
+        .download-area {
+
+            text-align: center;
+
+            margin-top: 25px;
+        }
+
+
+        .download-button {
+
+            display: inline-block;
+
+            padding: 14px 30px;
+
+            background-color: #222;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+        }
+
+
+        .download-button:hover {
+
+            opacity: 0.85;
+        }
+
+
+        /* ==================================================
+           TABLOLAR
+        ================================================== */
+
+
+        .table-container {
+
+            width: 100%;
+
+            overflow-x: auto;
+
+            border-radius: 8px;
+        }
+
+
+        .history-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 850px;
+        }
+
+
+        .history-table th {
+
+            background-color: #222;
+
+            color: white;
+
+            padding: 14px 10px;
+
+            text-align: center;
+
+            font-size: 14px;
+        }
+
+
+        .history-table td {
+
+            padding: 13px 10px;
+
+            border-bottom: 1px solid #ddd;
+
+            text-align: center;
+
+            font-size: 14px;
+        }
+
+
+        .history-table tbody tr:nth-child(even) {
+
+            background-color: #f4f6f8;
+        }
+
+
+        .history-table tbody tr:hover {
+
+            background-color: #e8edf2;
+        }
+
+
+        .history-filename {
+
+            max-width: 180px;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+        }
+
+
+        #historyMessage {
+
+            text-align: center;
+
+            color: #666;
+
+            padding: 20px;
+        }
+
+
+        /* ==================================================
+           GRAFİKLER
+        ================================================== */
+
+
+        .chart-container {
+
+            position: relative;
+
+            width: 100%;
+
+            height: 380px;
+
+            background-color: #f8f9fa;
+
+            border-radius: 10px;
+
+            padding: 20px;
+
+            box-sizing: border-box;
+        }
+
+
+        #chartMessage,
+        #liveChartMessage {
+
+            text-align: center;
+
+            color: #666;
+
+            margin-top: 15px;
+        }
+
+
+        /* ==================================================
+           CANLI TRAFİK
+        ================================================== */
+
+
+        #liveTrafficSection {
+
+            margin-top: 65px;
+
+            padding-top: 35px;
+
+            border-top: 3px solid #222;
+        }
+
+
+        .live-header-box {
+
+            background-color: #f4f6f8;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .camera-select-area {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .camera-select-area label {
+
+            font-weight: bold;
+        }
+
+
+        #cameraSelect {
+
+            padding: 12px 14px;
+
+            border-radius: 8px;
+
+            border: 1px solid #aaa;
+
+            font-size: 15px;
+
+            min-width: 260px;
+
+            background-color: white;
+        }
+
+
+        #loadLiveButton {
+
+            display: inline-block;
+
+            margin: 0;
+
+            padding: 12px 20px;
+        }
+
+
+        #liveStatus {
+
+            text-align: center;
+
+            margin-top: 18px;
+
+            font-weight: bold;
+        }
+
+
+        .live-summary-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+
+            margin-top: 25px;
+        }
+
+
+        .live-card {
+
+            background-color: #f4f6f8;
+
+            border-radius: 10px;
+
+            padding: 20px;
+
+            text-align: center;
+        }
+
+
+        .live-card span {
+
+            display: block;
+
+            color: #666;
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .live-card strong {
+
+            display: block;
+
+            font-size: 26px;
+        }
+
+
+        .highlight-card {
+
+            background-color: #e8edf2;
+        }
+
+
+        .live-current-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 12px;
+
+            margin-top: 20px;
+        }
+
+
+        .live-current-card {
+
+            background-color: #fafafa;
+
+            border: 1px solid #ddd;
+
+            border-radius: 8px;
+
+            padding: 15px;
+
+            text-align: center;
+        }
+
+
+        .live-current-card span {
+
+            display: block;
+
+            font-size: 13px;
+
+            color: #666;
+
+            margin-bottom: 7px;
+        }
+
+
+        .live-current-card strong {
+
+            font-size: 22px;
+        }
+
+
+        .conclusion-box {
+
+            margin-top: 25px;
+
+            padding: 22px;
+
+            border-radius: 10px;
+
+            background-color: #eef2f5;
+
+            line-height: 1.6;
+
+            text-align: center;
+        }
+
+
+        .conclusion-box strong {
+
+            display: block;
+
+            margin-bottom: 8px;
+        }
+
+
+        .test-warning {
+
+            display: none;
+
+            margin-top: 18px;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            background-color: #fff4d6;
+
+            line-height: 1.5;
+
+            font-size: 14px;
+        }
+
+
+        .live-history-section {
+
+            margin-top: 35px;
+        }
+
+
+        #liveHistoryMessage {
+
+            text-align: center;
+
+            color: #666;
+
+            margin-top: 15px;
+        }
+
+
+        /* ==================================================
+           MOBİL
+        ================================================== */
+
+
+        @media (max-width: 800px) {
+
+            .container {
+
+                width: 94%;
+
+                padding: 20px;
+
+                margin: 25px auto;
+            }
+
+
+            .features {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .total-card {
+
+                grid-column: span 1;
+            }
+
+
+            .lane-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .lane-summary {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .live-summary-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .live-current-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .chart-container {
+
+                height: 300px;
+
+                padding: 10px;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .live-summary-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .live-current-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- ==================================================
+         BAŞLIK
+    =================================================== -->
+
+
+    <h1>
+        🚦 Trafik Analiz Sistemi
+    </h1>
+
+
+    <p class="description">
+
+        Derin öğrenme tabanlı araç tespit,
+        takip ve trafik yoğunluğu analiz sistemi
+
+    </p>
+
+
+
+    <!-- ==================================================
+         VIDEO YÜKLEME
+    =================================================== -->
+
+
+    <div class="upload-box">
+
+        <h2>
+            Trafik Videosu Yükle
+        </h2>
+
+        <p>
+            Analiz etmek istediğiniz
+            trafik videosunu seçin.
+        </p>
+
+
+        <input
+            type="file"
+            id="videoFile"
+            accept="video/*"
+        >
+
+
+        <button
+            type="button"
+            id="analyzeButton"
+        >
+            Analizi Başlat
+        </button>
+
+
+        <div id="status"></div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         ANALİZ SONUÇLARI
+    =================================================== -->
+
+
+    <div id="results">
+
+        <h2>
+            📊 Analiz Sonuçları
+        </h2>
+
+
+        <div class="features">
+
+
+            <div class="result-card">
+
+                🚗 Otomobil
+
+                <strong id="carCount">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="result-card">
+
+                🚌 Otobüs
+
+                <strong id="busCount">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="result-card">
+
+                🚚 Kamyon
+
+                <strong id="truckCount">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="result-card">
+
+                🏍️ Motosiklet
+
+                <strong id="motorcycleCount">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="result-card total-card">
+
+                🔢 Toplam Araç
+
+                <strong id="totalCount">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="result-card">
+
+                📊 Trafik Yoğunluğu
+
+                <strong id="density">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="result-card">
+
+                ⏱️ Araç / Dakika
+
+                <strong id="vehiclesPerMinute">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="result-card">
+
+                ⬆️ Yukarı Yönde
+
+                <strong id="directionUp">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="result-card">
+
+                ⬇️ Aşağı Yönde
+
+                <strong id="directionDown">
+                    0
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         ŞERİT SAYIMI
+    =================================================== -->
+
+
+    <div id="laneResults">
+
+        <h2>
+            🛣️ Şerit Bazlı Araç Sayımı
+        </h2>
+
+
+        <p class="lane-description">
+
+            Sanal şerit bölgelerine göre
+            tespit edilen araç dağılımı
+
+        </p>
+
+
+        <div class="lane-grid">
+
+
+            <div class="lane-card">
+
+                🛣️ Şerit 1
+
+                <strong id="lane1Count">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="lane-card">
+
+                🛣️ Şerit 2
+
+                <strong id="lane2Count">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="lane-card">
+
+                🛣️ Şerit 3
+
+                <strong id="lane3Count">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="lane-card">
+
+                🛣️ Şerit 4
+
+                <strong id="lane4Count">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="lane-card">
+
+                🛣️ Şerit 5
+
+                <strong id="lane5Count">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="lane-card">
+
+                🛣️ Şerit 6
+
+                <strong id="lane6Count">
+                    0
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="lane-summary">
+
+
+            <div class="lane-summary-card">
+
+                ✅ Şeride Atanan
+
+                <strong id="laneTotal">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="lane-summary-card">
+
+                ❓ Şerit Dışı / Belirsiz
+
+                <strong id="laneUnknown">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="lane-summary-card">
+
+                🔢 Kontrol Toplamı
+
+                <strong id="laneControlTotal">
+                    0
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         İŞLENMİŞ VİDEO
+    =================================================== -->
+
+
+    <div id="videoResult">
+
+
+        <h2>
+            🎬 İşlenmiş Video
+        </h2>
+
+
+        <div class="video-container">
+
+            <video
+                id="processedVideo"
+                controls
+                preload="metadata"
+            >
+
+                Tarayıcınız video oynatmayı
+                desteklemiyor.
+
+            </video>
+
+        </div>
+
+
+        <div class="download-area">
+
+            <a
+                href="/download-report"
+                class="download-button"
+                id="downloadReport"
+            >
+                📥 CSV Raporunu İndir
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ==================================================
+         ANALİZ GEÇMİŞİ
+    =================================================== -->
+
+
+    <div
+        id="historySection"
+        class="section"
+    >
+
+
+        <h2>
+            📜 Analiz Geçmişi
+        </h2>
+
+
+        <p class="section-description">
+
+            Daha önce yüklenen videolar üzerinde
+            gerçekleştirilen trafik analizleri
+
+        </p>
+
+
+        <div class="table-container">
+
+
+            <table class="history-table">
+
+
+                <thead>
+
+                <tr>
+
+                    <th>#</th>
+
+                    <th>Video</th>
+
+                    <th>🚗</th>
+
+                    <th>🚌</th>
+
+                    <th>🚚</th>
+
+                    <th>🏍️</th>
+
+                    <th>Toplam</th>
+
+                    <th>Yoğunluk</th>
+
+                    <th>Tarih</th>
+
+                </tr>
+
+                </thead>
+
+
+                <tbody id="historyBody">
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+
+        <div id="historyMessage">
+
+            Analiz geçmişi yükleniyor...
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ==================================================
+         ESKİ SAATLİK GRAFİK
+    =================================================== -->
+
+
+    <div
+        id="chartSection"
+        class="section"
+    >
+
+
+        <h2>
+            📈 Video Analizlerinin Saatlik Dağılımı
+        </h2>
+
+
+        <p class="section-description">
+
+            Daha önce yüklenen videoların
+            analiz edildiği saatlere göre
+            tespit edilen toplam araç sayısı
+
+        </p>
+
+
+        <div class="chart-container">
+
+            <canvas id="hourlyChart"></canvas>
+
+        </div>
+
+
+        <div id="chartMessage"></div>
+
+
+    </div>
+
+
+
+    <!-- ==================================================
+         CANLI TRAFİK
+    =================================================== -->
+
+
+    <div id="liveTrafficSection">
+
+
+        <h2>
+            📡 Canlı Trafik ve Tarihsel Yoğunluk Analizi
+        </h2>
+
+
+        <p class="section-description">
+
+            Canlı trafik kamerasından toplanan
+            saatlik araç verileri günler boyunca
+            veritabanında saklanır ve geçmiş
+            verilere göre yolun tipik trafik
+            yoğunluğu profili oluşturulur.
+
+        </p>
+
+
+
+        <!-- Kamera seçimi -->
+
+
+        <div class="live-header-box">
+
+
+            <div class="camera-select-area">
+
+
+                <label for="cameraSelect">
+
+                    Kamera:
+
+                </label>
+
+
+                <select id="cameraSelect">
+
+
+                    <option value="07071 AKCAM SOKAK">
+
+                        07071 AKCAM SOKAK
+                        - Gerçek Kamera
+
+                    </option>
+
+
+                    <option value="TEST_CAMERA">
+
+                        TEST_CAMERA
+                        - 10 Günlük Test Verisi
+
+                    </option>
+
+
+                </select>
+
+
+                <button
+                    type="button"
+                    id="loadLiveButton"
+                >
+                    Verileri Getir
+                </button>
+
+
+            </div>
+
+
+            <div id="liveStatus">
+
+                Canlı trafik verileri
+                yüklenmeye hazır.
+
+            </div>
+
+
+            <div
+                id="testWarning"
+                class="test-warning"
+            >
+
+                ⚠️ Bu kamera seçeneğindeki
+                kayıtlar gerçek kamera ölçümü
+                değildir. Tarihsel analiz
+                algoritmasını 10 gün beklemeden
+                göstermek amacıyla oluşturulan
+                sentetik test verileridir.
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- Genel istatistikler -->
+
+
+        <div class="live-summary-grid">
+
+
+            <div class="live-card">
+
+                <span>
+                    📅 Gözlem Günü
+                </span>
+
+                <strong id="liveObservationDays">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="live-card">
+
+                <span>
+                    🕐 En Yoğun Saat
+                </span>
+
+                <strong id="liveBusiestHour">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="live-card highlight-card">
+
+                <span>
+                    🚘 Ortalama Araç
+                </span>
+
+                <strong id="liveBusiestAverage">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="live-card">
+
+                <span>
+                    💾 Saatlik Kayıt
+                </span>
+
+                <strong id="liveRecordCount">
+                    -
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- Son kayıt -->
+
+
+        <div class="section">
+
+
+            <h2>
+                🕒 Son Saatlik Kamera Kaydı
+            </h2>
+
+
+            <p class="section-description">
+
+                Seçilen kameranın
+                veritabanındaki en güncel
+                saatlik araç sayımı
+
+            </p>
+
+
+            <div class="live-current-grid">
+
+
+                <div class="live-current-card">
+
+                    <span>
+                        🚗 Otomobil
+                    </span>
+
+                    <strong id="liveCar">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="live-current-card">
+
+                    <span>
+                        🏍️ Motosiklet
+                    </span>
+
+                    <strong id="liveMotorcycle">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="live-current-card">
+
+                    <span>
+                        🚌 Otobüs
+                    </span>
+
+                    <strong id="liveBus">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="live-current-card">
+
+                    <span>
+                        🚚 Kamyon
+                    </span>
+
+                    <strong id="liveTruck">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="live-current-card">
+
+                    <span>
+                        🔢 Toplam
+                    </span>
+
+                    <strong id="liveTotal">
+                        -
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <p
+                id="liveLatestTime"
+                class="section-description"
+                style="margin-top: 15px;"
+            >
+            </p>
+
+
+        </div>
+
+
+
+        <!-- Tarihsel sonuç -->
+
+
+        <div
+            id="liveConclusion"
+            class="conclusion-box"
+        >
+
+            <strong>
+                📌 Tarihsel Analiz Sonucu
+            </strong>
+
+            Verileri görmek için
+            kamera seçip
+            “Verileri Getir” butonuna basın.
+
+        </div>
+
+
+
+        <!-- Tarihsel grafik -->
+
+
+        <div class="section">
+
+
+            <h2>
+                📊 Tarihsel Saatlik Trafik Profili
+            </h2>
+
+
+            <p class="section-description">
+
+                Aynı saatin farklı günlerdeki
+                araç sayılarının ortalaması
+
+            </p>
+
+
+            <div class="chart-container">
+
+                <canvas id="liveTrafficChart">
+                </canvas>
+
+            </div>
+
+
+            <div id="liveChartMessage"></div>
+
+
+        </div>
+
+
+
+        <!-- Saatlik ortalama tablo -->
+
+
+        <div class="live-history-section">
+
+
+            <h2>
+                📋 Saatlik Ortalama Değerler
+            </h2>
+
+
+            <div class="table-container">
+
+
+                <table class="history-table">
+
+
+                    <thead>
+
+                    <tr>
+
+                        <th>Saat</th>
+
+                        <th>Gün</th>
+
+                        <th>🚗</th>
+
+                        <th>🏍️</th>
+
+                        <th>🚌</th>
+
+                        <th>🚚</th>
+
+                        <th>Ortalama Toplam</th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody id="liveProfileBody">
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+            <div id="liveHistoryMessage">
+
+                Tarihsel profil
+                henüz yüklenmedi.
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ==================================================
+         SİSTEM ÖZELLİKLERİ
+    =================================================== -->
+
+
+    <div class="section">
+
+
+        <h2>
+            Sistem Özellikleri
+        </h2>
+
+
+        <div class="features">
+
+
+            <div class="feature">
+
+                🚗 Araç Tespiti
+
+            </div>
+
+
+            <div class="feature">
+
+                🎯 ByteTrack Araç Takibi
+
+            </div>
+
+
+            <div class="feature">
+
+                🔢 Araç Sayımı
+
+            </div>
+
+
+            <div class="feature">
+
+                📊 Trafik Yoğunluğu
+
+            </div>
+
+
+            <div class="feature">
+
+                ↕️ Hareket Yönü
+
+            </div>
+
+
+            <div class="feature">
+
+                🛣️ Şerit Bazlı Sayım
+
+            </div>
+
+
+            <div class="feature">
+
+                📄 CSV Raporu
+
+            </div>
+
+
+            <div class="feature">
+
+                💾 SQLite Veritabanı
+
+            </div>
+
+
+            <div class="feature">
+
+                📜 Analiz Geçmişi
+
+            </div>
+
+
+            <div class="feature">
+
+                📈 Saatlik Trafik Grafiği
+
+            </div>
+
+
+            <div class="feature">
+
+                📡 Canlı Kamera Analizi
+
+            </div>
+
+
+            <div class="feature">
+
+                🕐 Saatlik Canlı Araç Sayımı
+
+            </div>
+
+
+            <div class="feature">
+
+                📅 Çok Günlü Trafik Profili
+
+            </div>
+
+
+            <div class="feature">
+
+                🔍 En Yoğun Saat Analizi
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ==================================================
+     CHART.JS
+=================================================== -->
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/chart.js">
+</script>
+
+
+
+<script>
+
+
+    // ==================================================
+    // HTML ELEMANLARI
+    // ==================================================
+
+
+    const analyzeButton =
+        document.getElementById(
+            "analyzeButton"
+        );
+
+
+    const videoFile =
+        document.getElementById(
+            "videoFile"
+        );
+
+
+    const statusText =
+        document.getElementById(
+            "status"
+        );
+
+
+    const results =
+        document.getElementById(
+            "results"
+        );
+
+
+    const laneResults =
+        document.getElementById(
+            "laneResults"
+        );
+
+
+    const videoResult =
+        document.getElementById(
+            "videoResult"
+        );
+
+
+    const processedVideo =
+        document.getElementById(
+            "processedVideo"
+        );
+
+
+    const historyBody =
+        document.getElementById(
+            "historyBody"
+        );
+
+
+    const historyMessage =
+        document.getElementById(
+            "historyMessage"
+        );
+
+
+    const chartMessage =
+        document.getElementById(
+            "chartMessage"
+        );
+
+
+    const cameraSelect =
+        document.getElementById(
+            "cameraSelect"
+        );
+
+
+    const loadLiveButton =
+        document.getElementById(
+            "loadLiveButton"
+        );
+
+
+    const liveStatus =
+        document.getElementById(
+            "liveStatus"
+        );
+
+
+    const testWarning =
+        document.getElementById(
+            "testWarning"
+        );
+
+
+    const liveProfileBody =
+        document.getElementById(
+            "liveProfileBody"
+        );
+
+
+    const liveHistoryMessage =
+        document.getElementById(
+            "liveHistoryMessage"
+        );
+
+
+    const liveChartMessage =
+        document.getElementById(
+            "liveChartMessage"
+        );
+
+
+
+    // ==================================================
+    // CHART NESNELERİ
+    // ==================================================
+
+
+    let hourlyChart = null;
+
+    let liveTrafficChart = null;
+
+
+
+    // ==================================================
+    // ANALİZ GEÇMİŞİNİ GETİR
+    // ==================================================
+
+
+    async function loadHistory() {
+
+
+        try {
+
+
+            const response =
+                await fetch(
+                    "/history"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Analiz geçmişi alınamadı."
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            historyBody.innerHTML = "";
+
+
+            if (
+                data.history.length === 0
+            ) {
+
+
+                historyMessage.innerText =
+                    "Henüz kayıtlı bir analiz bulunmuyor.";
+
+
+                historyMessage.style.display =
+                    "block";
+
+
+                return;
+
+            }
+
+
+            historyMessage.style.display =
+                "none";
+
+
+            data.history.forEach(
+                function (analysis) {
+
+
+                    const row =
+                        document.createElement(
+                            "tr"
+                        );
+
+
+                    const date =
+                        new Date(
+                            analysis.created_at
+                        );
+
+
+                    const formattedDate =
+                        date.toLocaleString(
+                            "tr-TR"
+                        );
+
+
+                    row.innerHTML = `
+
+                        <td>
+                            ${analysis.id}
+                        </td>
+
+                        <td
+                            class="history-filename"
+                            title="${analysis.filename}"
+                        >
+                            ${analysis.filename}
+                        </td>
+
+                        <td>
+                            ${analysis.car}
+                        </td>
+
+                        <td>
+                            ${analysis.bus}
+                        </td>
+
+                        <td>
+                            ${analysis.truck}
+                        </td>
+
+                        <td>
+                            ${analysis.motorcycle}
+                        </td>
+
+                        <td>
+                            <strong>
+                                ${analysis.total}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${analysis.density}
+                        </td>
+
+                        <td>
+                            ${formattedDate}
+                        </td>
+                    `;
+
+
+                    historyBody.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+
+        } catch (error) {
+
+
+            console.error(error);
+
+
+            historyMessage.innerText =
+                "❌ Analiz geçmişi yüklenemedi.";
+
+
+            historyMessage.style.display =
+                "block";
+
+        }
+
+    }
+
+
+
+    // ==================================================
+    // ESKİ SAATLİK GRAFİK
+    // ==================================================
+
+
+    async function loadHourlyChart() {
+
+
+        try {
+
+
+            const response =
+                await fetch(
+                    "/hourly-stats"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Saatlik trafik verileri alınamadı."
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                data.stats.length === 0
+            ) {
+
+
+                chartMessage.innerText =
+                    "Henüz grafik oluşturmak için analiz bulunmuyor.";
+
+
+                return;
+
+            }
+
+
+            chartMessage.innerText = "";
+
+
+            const labels =
+                data.stats.map(
+                    function (item) {
+
+                        return item.hour;
+
+                    }
+                );
+
+
+            const vehicleTotals =
+                data.stats.map(
+                    function (item) {
+
+                        return (
+                            item.total_vehicles
+                        );
+
+                    }
+                );
+
+
+            const canvas =
+                document.getElementById(
+                    "hourlyChart"
+                );
+
+
+            const context =
+                canvas.getContext(
+                    "2d"
+                );
+
+
+            if (
+                hourlyChart !== null
+            ) {
+
+                hourlyChart.destroy();
+
+            }
+
+
+            hourlyChart =
+                new Chart(
+
+                    context,
+
+                    {
+
+                        type: "bar",
+
+
+                        data: {
+
+                            labels: labels,
+
+                            datasets: [
+
+                                {
+
+                                    label:
+                                        "Toplam Araç",
+
+                                    data:
+                                        vehicleTotals,
+
+                                    borderWidth: 1
+
+                                }
+
+                            ]
+
+                        },
+
+
+                        options: {
+
+                            responsive: true,
+
+                            maintainAspectRatio:
+                                false,
+
+
+                            plugins: {
+
+                                legend: {
+
+                                    display:
+                                        true
+
+                                }
+
+                            },
+
+
+                            scales: {
+
+                                y: {
+
+                                    beginAtZero:
+                                        true,
+
+                                    title: {
+
+                                        display:
+                                            true,
+
+                                        text:
+                                            "Araç Sayısı"
+
+                                    }
+
+                                },
+
+
+                                x: {
+
+                                    title: {
+
+                                        display:
+                                            true,
+
+                                        text:
+                                            "Analiz Saati"
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                );
+
+
+        } catch (error) {
+
+
+            console.error(error);
+
+
+            chartMessage.innerText =
+                "❌ Saatlik trafik grafiği yüklenemedi.";
+
+        }
+
+    }
+
+
+
+    // ==================================================
+    // CANLI TRAFİK ÖZETİNİ GETİR
+    // ==================================================
+
+
+    async function loadLiveSummary(
+        cameraName
+    ) {
+
+
+        const url =
+
+            "/live-traffic/summary"
+            +
+            "?camera_name="
+            +
+            encodeURIComponent(
+                cameraName
+            );
+
+
+        const response =
+            await fetch(url);
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Canlı trafik özeti alınamadı."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        document.getElementById(
+            "liveRecordCount"
+        ).innerText =
+            data.record_count;
+
+
+        return data;
+
+    }
+
+
+
+    // ==================================================
+    // CANLI TRAFİK SON KAYIT
+    // ==================================================
+
+
+    async function loadLiveLatest(
+        cameraName
+    ) {
+
+
+        const url =
+
+            "/live-traffic/latest"
+            +
+            "?camera_name="
+            +
+            encodeURIComponent(
+                cameraName
+            );
+
+
+        const response =
+            await fetch(url);
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Son saatlik kayıt alınamadı."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        document.getElementById(
+            "liveCar"
+        ).innerText =
+            data.car;
+
+
+        document.getElementById(
+            "liveMotorcycle"
+        ).innerText =
+            data.motorcycle;
+
+
+        document.getElementById(
+            "liveBus"
+        ).innerText =
+            data.bus;
+
+
+        document.getElementById(
+            "liveTruck"
+        ).innerText =
+            data.truck;
+
+
+        document.getElementById(
+            "liveTotal"
+        ).innerText =
+            data.total;
+
+
+        document.getElementById(
+            "liveLatestTime"
+        ).innerText =
+
+            "Son kayıt: "
+            +
+            data.hour_start;
+
+
+        return data;
+
+    }
+
+
+
+    // ==================================================
+    // TARİHSEL TRAFİK PROFİLİ
+    // ==================================================
+
+
+    async function loadLiveProfile(
+        cameraName
+    ) {
+
+
+        const url =
+
+            "/live-traffic/profile"
+            +
+            "?camera_name="
+            +
+            encodeURIComponent(
+                cameraName
+            );
+
+
+        const response =
+            await fetch(url);
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Tarihsel trafik profili alınamadı."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+
+        // ----------------------------------------------
+        // ÖZET KARTLARI
+        // ----------------------------------------------
+
+
+        document.getElementById(
+            "liveObservationDays"
+        ).innerText =
+            data.total_observation_days;
+
+
+        document.getElementById(
+            "liveBusiestHour"
+        ).innerText =
+            data.busiest_hour;
+
+
+        document.getElementById(
+            "liveBusiestAverage"
+        ).innerText =
+            Number(
+                data.busiest_average
+            ).toFixed(2);
+
+
+
+        // ----------------------------------------------
+        // SONUÇ METNİ
+        // ----------------------------------------------
+
+
+        document.getElementById(
+            "liveConclusion"
+        ).innerHTML = `
+
+            <strong>
+                📌 Tarihsel Analiz Sonucu
+            </strong>
+
+            ${data.conclusion}
+
+        `;
+
+
+
+        // ----------------------------------------------
+        // TABLO
+        // ----------------------------------------------
+
+
+        liveProfileBody.innerHTML = "";
+
+
+        data.hourly_profile.forEach(
+            function (item) {
+
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${item.hour}
+                    </td>
+
+                    <td>
+                        ${item.day_count}
+                    </td>
+
+                    <td>
+                        ${item.average.car}
+                    </td>
+
+                    <td>
+                        ${item.average.motorcycle}
+                    </td>
+
+                    <td>
+                        ${item.average.bus}
+                    </td>
+
+                    <td>
+                        ${item.average.truck}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${item.average.total}
+                        </strong>
+                    </td>
+
+                `;
+
+
+                liveProfileBody.appendChild(
+                    row
+                );
+
+            }
+        );
+
+
+        liveHistoryMessage.style.display =
+            "none";
+
+
+
+        // ----------------------------------------------
+        // GRAFİK
+        // ----------------------------------------------
+
+
+        const labels =
+            data.hourly_profile.map(
+                function (item) {
+
+                    return item.hour;
+
+                }
+            );
+
+
+        const averages =
+            data.hourly_profile.map(
+                function (item) {
+
+                    return (
+                        item.average.total
+                    );
+
+                }
+            );
+
+
+        const canvas =
+            document.getElementById(
+                "liveTrafficChart"
+            );
+
+
+        const context =
+            canvas.getContext(
+                "2d"
+            );
+
+
+        if (
+            liveTrafficChart !== null
+        ) {
+
+            liveTrafficChart.destroy();
+
+        }
+
+
+        liveTrafficChart =
+            new Chart(
+
+                context,
+
+                {
+
+                    type: "line",
+
+
+                    data: {
+
+                        labels: labels,
+
+                        datasets: [
+
+                            {
+
+                                label:
+                                    "Ortalama Araç Sayısı",
+
+                                data:
+                                    averages,
+
+                                borderWidth:
+                                    2,
+
+                                tension:
+                                    0.25,
+
+                                fill:
+                                    false
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive:
+                            true,
+
+                        maintainAspectRatio:
+                            false,
+
+
+                        plugins: {
+
+                            legend: {
+
+                                display:
+                                    true
+
+                            }
+
+                        },
+
+
+                        scales: {
+
+                            y: {
+
+                                beginAtZero:
+                                    true,
+
+                                title: {
+
+                                    display:
+                                        true,
+
+                                    text:
+                                        "Ortalama Araç Sayısı"
+
+                                }
+
+                            },
+
+
+                            x: {
+
+                                title: {
+
+                                    display:
+                                        true,
+
+                                    text:
+                                        "Saat"
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+
+        liveChartMessage.innerText = "";
+
+
+        return data;
+
+    }
+
+
+
+    // ==================================================
+    // TÜM CANLI TRAFİK VERİLERİNİ YÜKLE
+    // ==================================================
+
+
+    async function loadLiveTraffic() {
+
+
+        const cameraName =
+            cameraSelect.value;
+
+
+        liveStatus.innerText =
+            "⏳ Trafik verileri yükleniyor...";
+
+
+        loadLiveButton.disabled =
+            true;
+
+
+        if (
+            cameraName === "TEST_CAMERA"
+        ) {
+
+            testWarning.style.display =
+                "block";
+
+        } else {
+
+            testWarning.style.display =
+                "none";
+
+        }
+
+
+        try {
+
+
+            await loadLiveSummary(
+                cameraName
+            );
+
+
+            await loadLiveLatest(
+                cameraName
+            );
+
+
+            await loadLiveProfile(
+                cameraName
+            );
+
+
+            liveStatus.innerText =
+                "✅ Trafik verileri başarıyla yüklendi.";
+
+
+        } catch (error) {
+
+
+            console.error(error);
+
+
+            liveStatus.innerText =
+                "❌ Trafik verileri yüklenemedi.";
+
+
+            liveHistoryMessage.innerText =
+                "Veri bulunamadı veya sunucu hatası oluştu.";
+
+
+            liveHistoryMessage.style.display =
+                "block";
+
+
+        } finally {
+
+
+            loadLiveButton.disabled =
+                false;
+
+        }
+
+    }
+
+
+
+    // ==================================================
+    // CANLI TRAFİK BUTONU
+    // ==================================================
+
+
+    loadLiveButton.addEventListener(
+
+        "click",
+
+        async function () {
+
+            await loadLiveTraffic();
+
+        }
+
+    );
+
+
+
+    // ==================================================
+    // VIDEO ANALİZ BUTONU
+    // ==================================================
+
+
+    analyzeButton.addEventListener(
+
+        "click",
+
+        async function () {
+
+
+            // ------------------------------------------
+            // DOSYA SEÇİLMİŞ Mİ?
+            // ------------------------------------------
+
+
+            if (
+                videoFile.files.length === 0
+            ) {
+
+
+                statusText.innerText =
+                    "⚠️ Lütfen önce bir trafik videosu seçin.";
+
+
+                return;
+
+            }
+
+
+
+            const file =
+                videoFile.files[0];
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "file",
+                file
+            );
+
+
+
+            // ------------------------------------------
+            // ANALİZ BAŞLIYOR
+            // ------------------------------------------
+
+
+            analyzeButton.disabled =
+                true;
+
+
+            analyzeButton.innerText =
+                "Video analiz ediliyor...";
+
+
+            statusText.innerText =
+                "⏳ Video analiz ediliyor. Lütfen bekleyin...";
+
+
+            results.style.display =
+                "none";
+
+
+            laneResults.style.display =
+                "none";
+
+
+            videoResult.style.display =
+                "none";
+
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+
+                        "/analyze",
+
+                        {
+
+                            method:
+                                "POST",
+
+                            body:
+                                formData
+
+                        }
+
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Video analizi sırasında hata oluştu."
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                const report =
+                    data.report;
+
+
+
+                // --------------------------------------
+                // ARAÇ SAYILARI
+                // --------------------------------------
+
+
+                document.getElementById(
+                    "carCount"
+                ).innerText =
+                    report.car;
+
+
+                document.getElementById(
+                    "busCount"
+                ).innerText =
+                    report.bus;
+
+
+                document.getElementById(
+                    "truckCount"
+                ).innerText =
+                    report.truck;
+
+
+                document.getElementById(
+                    "motorcycleCount"
+                ).innerText =
+                    report.motorcycle;
+
+
+
+                // --------------------------------------
+                // TOPLAM
+                // --------------------------------------
+
+
+                document.getElementById(
+                    "totalCount"
+                ).innerText =
+                    report.total;
+
+
+
+                // --------------------------------------
+                // YOĞUNLUK
+                // --------------------------------------
+
+
+                document.getElementById(
+                    "density"
+                ).innerText =
+                    report.density;
+
+
+
+                // --------------------------------------
+                // ARAÇ / DAKİKA
+                // --------------------------------------
+
+
+                document.getElementById(
+                    "vehiclesPerMinute"
+                ).innerText =
+                    report.vehicles_per_minute;
+
+
+
+                // --------------------------------------
+                // YÖNLER
+                // --------------------------------------
+
+
+                document.getElementById(
+                    "directionUp"
+                ).innerText =
+                    report.direction_up;
+
+
+                document.getElementById(
+                    "directionDown"
+                ).innerText =
+                    report.direction_down;
+
+
+
+                // --------------------------------------
+                // ŞERİTLER
+                // --------------------------------------
+
+
+                document.getElementById(
+                    "lane1Count"
+                ).innerText =
+                    report.lane_1;
+
+
+                document.getElementById(
+                    "lane2Count"
+                ).innerText =
+                    report.lane_2;
+
+
+                document.getElementById(
+                    "lane3Count"
+                ).innerText =
+                    report.lane_3;
+
+
+                document.getElementById(
+                    "lane4Count"
+                ).innerText =
+                    report.lane_4;
+
+
+                document.getElementById(
+                    "lane5Count"
+                ).innerText =
+                    report.lane_5;
+
+
+                document.getElementById(
+                    "lane6Count"
+                ).innerText =
+                    report.lane_6;
+
+
+
+                // --------------------------------------
+                // ŞERİT ÖZET
+                // --------------------------------------
+
+
+                document.getElementById(
+                    "laneTotal"
+                ).innerText =
+                    report.lane_total;
+
+
+                document.getElementById(
+                    "laneUnknown"
+                ).innerText =
+                    report.lane_unknown;
+
+
+                document.getElementById(
+                    "laneControlTotal"
+                ).innerText =
+                    report.lane_control_total;
+
+
+
+                // --------------------------------------
+                // SONUÇLARI GÖSTER
+                // --------------------------------------
+
+
+                results.style.display =
+                    "block";
+
+
+                laneResults.style.display =
+                    "block";
+
+
+
+                // --------------------------------------
+                // İŞLENMİŞ VİDEO
+                // --------------------------------------
+
+
+                processedVideo.src =
+
+                    "/processed-video?t="
+                    +
+                    Date.now();
+
+
+                processedVideo.load();
+
+
+                videoResult.style.display =
+                    "block";
+
+
+
+                // --------------------------------------
+                // GEÇMİŞ VE GRAFİĞİ YENİLE
+                // --------------------------------------
+
+
+                await loadHistory();
+
+
+                await loadHourlyChart();
+
+
+
+                statusText.innerText =
+                    "✅ Video analizi tamamlandı.";
+
+
+
+                results.scrollIntoView({
+
+                    behavior:
+                        "smooth"
+
+                });
+
+
+            } catch (error) {
+
+
+                console.error(error);
+
+
+                statusText.innerText =
+                    "❌ Analiz sırasında bir hata oluştu.";
+
+
+            } finally {
+
+
+                analyzeButton.disabled =
+                    false;
+
+
+                analyzeButton.innerText =
+                    "Analizi Başlat";
+
+            }
+
+        }
+
+    );
+
+
+
+    // ==================================================
+    // SAYFA İLK AÇILDIĞINDA
+    // ==================================================
+
+
+    loadHistory();
+
+
+    loadHourlyChart();
+
+
+    loadLiveTraffic();
+
+
+</script>
+
+
+</body>
+
+</html>

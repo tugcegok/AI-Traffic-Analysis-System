@@ -1,0 +1,15 @@
+fastapi==0.141.1
+uvicorn==0.52.4
+ultralytics==8.4.142
+opencv-python==5.0.0.93
+numpy==2.5.3
+SQLAlchemy==2.0.52
+pydantic==2.13.5
+PyJWT==2.13.0
+passlib==1.7.4
+bcrypt==4.0.1
+python-multipart==0.0.32
+Jinja2==3.1.6
+PyYAML==6.0.3
+lap==0.5.13
+python-dotenv==1.2.4

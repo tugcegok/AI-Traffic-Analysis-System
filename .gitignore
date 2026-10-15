@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Mac ve VS Code
+.DS_Store
+.vscode/
+.idea/
+
+# Gizli bilgiler
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Veritabani
+*.db
+*.sqlite
+*.sqlite3
+
+# Video ve analiz ciktilari
+uploads/
+outputs/
+reports/
+live_frames/
+live_motorcycle_frames/
+
+# YOLO model dosyalari
+*.pt
+
+# Gecici dosyalar
+*.log
+*.tmp
+
+# Ana klasordeki tekrar eden gorseller
+/base_model_result.jpg
+/custom_model_result.jpg
+/lane_test.jpg
+/motorcycle_test.jpg

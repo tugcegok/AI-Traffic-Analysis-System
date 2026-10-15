@@ -1,0 +1,20 @@
+tracker_type: bytetrack
+
+# Güçlü tespitlerin doğrudan takibe alınma eşiği
+track_high_thresh: 0.15
+
+# Daha düşük güvenli tespitlerin de mevcut araçlarla
+# eşleştirilebilmesine izin veriyoruz
+track_low_thresh: 0.05
+
+# Yeni bir araç ID'si oluşturmak için gereken eşik
+new_track_thresh: 0.10
+
+# Araç birkaç kare kaybolursa ID hemen silinmesin
+track_buffer: 90
+
+# Kutuların eşleştirilme toleransı
+match_thresh: 0.85
+
+# Tespit güven skorunu eşleştirmede kullan
+fuse_score: True
