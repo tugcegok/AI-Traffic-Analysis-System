@@ -166,6 +166,12 @@ Features include:
 
 Live-stream availability depends on the external camera provider.
 
+
+### Live Traffic Monitoring Demo
+
+![Live Traffic Monitoring - YOLO11 and ByteTrack](docs/images/live_traffic_monitor.png)
+
+
 ## Historical Traffic Analytics
 
 The project provides SQL-based aggregation of hourly traffic records.
